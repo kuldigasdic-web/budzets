@@ -2,60 +2,77 @@
 <html lang="lv">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tavs eiro Kuldīgā 2026 | Kuldīgas novada budžeta čeks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Tavs eiro Kuldīgā 2026 | Kuldīgas novada budžeta un statistikas panelis</title>
   <style>
     :root {
-      /* Official Kuldīga Municipality 2026 Presentation Palette */
       --bg: #f3f1eb;
       --card: #ffffff;
       --ink: #22281e;
       --muted: #5a6354;
-      --olive: #3b462e;       /* Kuldīga deep olive green */
+      --olive: #3b462e;
       --olive-soft: #eaede6;
-      --rust: #8c4a19;        /* Kuldīga warm brick/terracotta */
+      --rust: #8c4a19;
       --rust-soft: #f7efe8;
-      --gold: #a39535;        /* Kuldīga accent ochre */
+      --gold: #a39535;
       --border: #dcd8cc;
+      --pos: #2e6b3e;
+      --pos-bg: #e7f3ea;
+      --neg: #9c3328;
+      --neg-bg: #faeae8;
       --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       font-family: var(--sans);
       background: var(--bg);
       color: var(--ink);
       line-height: 1.5;
+      overflow-x: hidden;
     }
 
+    button, input {
+      touch-action: manipulation;
+    }
+
+    /* Galvene */
     header {
       background: var(--olive);
       color: #fff;
-      padding: 1.25rem 1.5rem;
+      padding: 1rem 1.25rem;
       border-bottom: 4px solid var(--rust);
     }
 
     .header-inner {
-      max-width: 1140px;
+      max-width: 1180px;
       margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
+      gap: 0.85rem;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.9rem;
+      gap: 0.75rem;
+      min-width: 0;
     }
 
     .crest {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 10px;
       background: var(--rust);
       display: grid;
@@ -69,30 +86,35 @@
 
     .brand h1 {
       margin: 0;
-      font-size: 1.25rem;
+      font-size: clamp(1.02rem, 2.5vw, 1.25rem);
       font-weight: 700;
+      line-height: 1.25;
     }
 
     .brand p {
-      margin: 0;
-      font-size: 0.82rem;
+      margin: 0.15rem 0 0;
+      font-size: 0.78rem;
       color: #d8ddd2;
+      line-height: 1.3;
     }
 
     .lang-toggle {
       display: inline-flex;
       background: rgba(255,255,255,0.14);
-      border-radius: 8px;
+      border-radius: 9px;
       padding: 3px;
+      flex-shrink: 0;
     }
 
     .lang-toggle button {
       border: none;
       background: transparent;
       color: #e2e6dd;
-      padding: 0.35rem 0.75rem;
-      border-radius: 6px;
-      font-weight: 600;
+      min-width: 40px;
+      min-height: 36px;
+      padding: 0.35rem 0.65rem;
+      border-radius: 7px;
+      font-weight: 700;
       font-size: 0.82rem;
       cursor: pointer;
     }
@@ -102,84 +124,307 @@
       color: var(--olive);
     }
 
-    main {
-      max-width: 1140px;
-      margin: 2rem auto;
-      padding: 0 1.25rem 3rem;
-      display: grid;
-      grid-template-columns: 1.12fr 0.88fr;
-      gap: 2rem;
-      align-items: start;
+    .container {
+      max-width: 1180px;
+      margin: 1.5rem auto 4rem;
+      padding: 0 1rem;
     }
 
-    @media (max-width: 880px) {
-      main { grid-template-columns: 1fr; }
+    /* Pārskata režģis (virs kalkulatora) */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.25rem;
+      margin-bottom: 1.75rem;
+      align-items: stretch;
+    }
+
+    .right-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
     }
 
     .panel {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 1.75rem;
+      padding: 1.35rem 1.4rem;
       box-shadow: 0 10px 30px rgba(34, 40, 30, 0.05);
+      min-width: 0;
+    }
+
+    .badges-row {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.55rem;
     }
 
     .section-tag {
       display: inline-block;
-      font-size: 0.74rem;
+      font-size: 0.71rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.04em;
       color: var(--rust);
       background: var(--rust-soft);
-      padding: 0.25rem 0.65rem;
+      padding: 0.24rem 0.58rem;
       border-radius: 6px;
-      margin-bottom: 0.65rem;
+    }
+
+    .section-tag.csp {
+      color: var(--olive);
+      background: var(--olive-soft);
     }
 
     h2 {
-      margin: 0 0 0.4rem;
-      font-size: 1.35rem;
+      margin: 0 0 0.35rem;
+      font-size: clamp(1.12rem, 2.4vw, 1.28rem);
       color: var(--olive);
+      line-height: 1.3;
     }
 
     .sub {
-      margin: 0 0 1.4rem;
+      margin: 0 0 1rem;
       color: var(--muted);
-      font-size: 0.92rem;
+      font-size: 0.87rem;
+    }
+
+    /* Salīdzinājuma tabula 2025 vs 2026 */
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+    }
+
+    .comp-table th {
+      text-align: left;
+      padding: 0.5rem 0.4rem;
+      border-bottom: 2px solid var(--border);
+      color: var(--muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+    }
+
+    .comp-table th.num, .comp-table td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .comp-table td {
+      padding: 0.55rem 0.4rem;
+      border-bottom: 1px solid #ece8de;
+    }
+
+    .comp-table tr.group-row td {
+      background: #f9f8f4;
+      font-weight: 700;
+      font-size: 0.75rem;
+      letter-spacing: 0.03em;
+      color: var(--olive);
+      border-top: 1px solid var(--border);
+    }
+
+    .delta-pill {
+      display: inline-block;
+      padding: 0.16rem 0.44rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.75rem;
+    }
+
+    .delta-pos { background: var(--pos-bg); color: var(--pos); }
+    .delta-neg { background: var(--neg-bg); color: var(--neg); }
+
+    /* Iedzīvotāju sastāvs */
+    .pop-hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .pop-big {
+      font-size: clamp(1.7rem, 4vw, 2rem);
+      font-weight: 800;
+      color: var(--olive);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pop-sub-stat {
+      font-size: 0.79rem;
+      color: var(--muted);
+    }
+
+    .stacked-bar {
+      display: flex;
+      height: 14px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin: 0.6rem 0 0.85rem;
+      background: #ece8dc;
+    }
+
+    .seg-work { background: var(--olive); }
+    .seg-senior { background: var(--rust); }
+    .seg-youth { background: var(--gold); }
+
+    .demo-legend {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+    }
+
+    .demo-box {
+      background: #f9f8f4;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.55rem 0.6rem;
+    }
+
+    .demo-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    .demo-label { font-size: 0.71rem; color: var(--muted); display: block; line-height: 1.25; }
+    .demo-val { font-weight: 800; font-size: 0.92rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+    .mini-kpis {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.75rem;
+      margin-top: 0.8rem;
+      padding-top: 0.75rem;
+      border-top: 1px dashed var(--border);
+      font-size: 0.79rem;
+      color: var(--muted);
+    }
+
+    /* Sektoru algas */
+    .sector-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.55rem;
+    }
+
+    .sector-card {
+      border: 1px solid var(--border);
+      background: #f9f8f4;
+      border-radius: 12px;
+      padding: 0.75rem 0.7rem;
+      min-height: 44px;
+      cursor: pointer;
+      transition: all 0.15s;
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .sector-card:hover, .sector-card:active {
+      border-color: var(--rust);
+      background: var(--rust-soft);
+    }
+
+    .sector-title { font-size: 0.74rem; color: var(--muted); display: block; margin-bottom: 0.2rem; line-height: 1.25; }
+    .sector-amt { font-size: 1.12rem; font-weight: 800; color: var(--rust); font-variant-numeric: tabular-nums; }
+    .sector-hint { font-size: 0.69rem; color: var(--olive); display: block; margin-top: 0.25rem; font-weight: 700; }
+
+    /* Atdalītājs */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin: 0.4rem 0 1.35rem;
+      color: var(--olive);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .section-divider::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* Kalkulatora režģis */
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.5rem;
+      align-items: start;
     }
 
     .salary-box {
       background: #f9f8f4;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 1.4rem;
+      padding: 1.15rem;
+      margin-bottom: 1.35rem;
     }
 
     .salary-top {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+      margin-bottom: 0.8rem;
     }
 
-    .salary-top label {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
+    .salary-top label { font-weight: 600; font-size: 0.93rem; }
+    .salary-value { font-size: 1.7rem; font-weight: 800; color: var(--rust); font-variant-numeric: tabular-nums; }
 
-    .salary-value {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: var(--rust);
-      font-variant-numeric: tabular-nums;
-    }
-
+    /* Pirkstam draudzīgs slīdnis */
     input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
       width: 100%;
-      accent-color: var(--rust);
-      height: 8px;
+      height: 10px;
+      background: #dfd9cc;
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--rust);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--rust);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
       cursor: pointer;
     }
 
@@ -187,125 +432,136 @@
       display: flex;
       gap: 0.45rem;
       flex-wrap: wrap;
-      margin-top: 0.85rem;
+      margin-top: 0.95rem;
     }
 
     .preset-btn {
       border: 1px solid var(--border);
       background: #fff;
       color: var(--ink);
-      padding: 0.32rem 0.68rem;
+      min-height: 36px;
+      padding: 0.38rem 0.75rem;
       border-radius: 20px;
-      font-size: 0.79rem;
+      font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s;
     }
 
-    .preset-btn:hover {
+    .preset-btn:hover, .preset-btn:active {
       border-color: var(--rust);
       color: var(--rust);
+      background: var(--rust-soft);
     }
 
     .dependents-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.75rem;
       margin-top: 1rem;
       padding-top: 1rem;
       border-top: 1px dashed var(--border);
       font-size: 0.9rem;
     }
 
+    /* 40px pieskāriena pogas skaitītājiem */
     .stepper {
       display: inline-flex;
       align-items: center;
-      gap: 0.65rem;
+      gap: 0.45rem;
+      flex-shrink: 0;
     }
 
     .stepper button {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
       border: 1px solid var(--border);
       background: #fff;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 1.1rem;
       cursor: pointer;
-    }
-
-    .services-title {
-      font-size: 1rem;
-      font-weight: 700;
-      margin: 1.35rem 0 0.3rem;
-      color: var(--olive);
-    }
-
-    .services-grid {
+      color: var(--ink);
       display: grid;
-      gap: 0.6rem;
-      margin-top: 0.7rem;
+      place-items: center;
     }
+
+    .stepper button:hover, .stepper button:active {
+      border-color: var(--olive);
+      background: var(--olive-soft);
+    }
+
+    .stepper strong {
+      min-width: 1.4rem;
+      text-align: center;
+      font-size: 1rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .services-title { font-size: 1rem; font-weight: 700; margin: 1.25rem 0 0.3rem; color: var(--olive); }
+    .services-grid { display: grid; gap: 0.65rem; margin-top: 0.7rem; }
 
     .service-item {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.72rem 0.9rem;
+      gap: 0.75rem;
+      padding: 0.8rem 0.9rem;
       border: 1px solid var(--border);
-      border-radius: 10px;
-      cursor: pointer;
+      border-radius: 12px;
       transition: all 0.15s;
       user-select: none;
     }
 
-    .service-item.checked {
-      border-color: var(--olive);
-      background: var(--olive-soft);
-    }
+    .service-item.clickable { cursor: pointer; min-height: 54px; }
+    .service-item.active { border-color: var(--olive); background: var(--olive-soft); }
 
     .service-left {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 0.7rem;
+      flex: 1;
+      min-width: 0;
     }
 
-    .service-left input {
-      width: 18px;
-      height: 18px;
+    .service-left input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
       accent-color: var(--olive);
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .service-name {
-      font-weight: 600;
-      font-size: 0.89rem;
-      display: block;
-    }
+    .service-name { font-weight: 600; font-size: 0.89rem; display: block; line-height: 1.3; }
+    .service-desc { font-size: 0.75rem; color: var(--muted); display: block; margin-top: 2px; line-height: 1.3; }
 
-    .service-desc {
-      font-size: 0.77rem;
-      color: var(--muted);
+    .service-right {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      flex-shrink: 0;
     }
 
     .service-cost {
       font-weight: 700;
-      font-size: 0.84rem;
+      font-size: 0.85rem;
       color: var(--olive);
       white-space: nowrap;
-      margin-left: 0.5rem;
+      text-align: right;
     }
 
-    /* Thermal Receipt Styling */
-    .receipt-wrapper {
-      position: sticky;
-      top: 1.5rem;
-    }
+    .service-cost small { display: block; font-weight: 500; font-size: 0.71rem; color: var(--muted); }
+
+    /* Termočeks */
+    .receipt-wrapper { position: sticky; top: 1.25rem; }
 
     .receipt {
       background: #fffefa;
       border: 1px solid #d5d0c3;
-      border-radius: 6px;
-      padding: 1.65rem 1.45rem;
+      border-radius: 8px;
+      padding: 1.5rem 1.35rem;
       font-family: var(--mono);
       box-shadow: 0 14px 35px rgba(34, 40, 30, 0.09);
     }
@@ -313,81 +569,48 @@
     .receipt-header {
       text-align: center;
       border-bottom: 2px dashed #bdb7a8;
-      padding-bottom: 0.95rem;
-      margin-bottom: 0.95rem;
+      padding-bottom: 0.9rem;
+      margin-bottom: 0.9rem;
     }
 
     .receipt-header h3 {
       margin: 0;
-      font-size: 1.02rem;
+      font-size: 1rem;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--olive);
     }
 
-    .receipt-meta {
-      font-size: 0.74rem;
-      color: var(--muted);
-      margin-top: 0.3rem;
-    }
+    .receipt-meta { font-size: 0.73rem; color: var(--muted); margin-top: 0.3rem; }
 
     .receipt-line {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
-      padding: 0.44rem 0;
+      align-items: flex-start;
+      gap: 0.65rem;
+      padding: 0.48rem 0;
       font-size: 0.82rem;
       border-bottom: 1px dotted #e2ddd0;
     }
 
     .receipt-line:last-child { border-bottom: none; }
+    .line-label { flex: 1; min-width: 0; }
+    .line-pct { color: var(--muted); font-size: 0.74rem; }
+    .line-projects { display: block; font-family: var(--sans); font-size: 0.72rem; color: var(--muted); margin-top: 2px; line-height: 1.3; }
+    .line-amt { font-weight: 700; white-space: nowrap; color: var(--ink); }
 
-    .line-label {
-      padding-right: 0.75rem;
-    }
-
-    .line-pct {
-      color: var(--muted);
-      font-size: 0.74rem;
-    }
-
-    .line-projects {
-      display: block;
-      font-family: var(--sans);
-      font-size: 0.72rem;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .line-amt {
-      font-weight: 700;
-      white-space: nowrap;
-      color: var(--ink);
-    }
-
-    .bar-track {
-      width: 100%;
-      height: 5px;
-      background: #ece8dc;
-      border-radius: 3px;
-      margin-top: 4px;
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      background: var(--rust);
-      border-radius: 3px;
-      transition: width 0.25s ease;
-    }
+    .bar-track { width: 100%; height: 5px; background: #ece8dc; border-radius: 3px; margin-top: 5px; overflow: hidden; }
+    .bar-fill { height: 100%; background: var(--rust); border-radius: 3px; transition: width 0.25s ease; }
 
     .receipt-total {
-      margin-top: 0.95rem;
+      margin-top: 0.9rem;
       padding-top: 0.85rem;
       border-top: 2px dashed #bdb7a8;
       display: flex;
       justify-content: space-between;
-      font-size: 0.98rem;
+      align-items: baseline;
+      gap: 0.5rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: var(--rust);
     }
@@ -396,88 +619,189 @@
       margin-top: 0.95rem;
       background: var(--olive-soft);
       border: 1px solid #c2cbb8;
-      border-radius: 8px;
+      border-radius: 10px;
       padding: 0.85rem;
       font-family: var(--sans);
     }
 
-    .value-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.88rem;
-    }
-
-    .value-highlight {
-      font-size: 1.12rem;
-      font-weight: 800;
-      color: var(--olive);
-    }
-
-    .value-note {
-      margin: 0.45rem 0 0;
-      font-size: 0.78rem;
-      color: #2f3825;
-    }
+    .value-row { display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; font-size: 0.88rem; }
+    .value-highlight { font-size: 1.15rem; font-weight: 800; color: var(--olive); white-space: nowrap; }
+    .value-breakdown { margin-top: 0.45rem; padding-top: 0.45rem; border-top: 1px dashed #b9c3ae; font-size: 0.76rem; color: var(--muted); }
+    .value-note { margin: 0.5rem 0 0; font-size: 0.79rem; font-weight: 500; color: #2f3825; line-height: 1.38; }
 
     .receipt-footer {
       text-align: center;
       margin-top: 1rem;
       padding-top: 0.8rem;
       border-top: 1px dashed #bdb7a8;
-      font-size: 0.73rem;
+      font-size: 0.71rem;
       color: var(--muted);
+      line-height: 1.4;
     }
 
     .actions {
       display: flex;
-      gap: 0.75rem;
+      gap: 0.65rem;
       margin-top: 0.95rem;
     }
 
     .btn-primary {
       flex: 1;
+      min-height: 46px;
       background: var(--olive);
       color: #fff;
       border: none;
       padding: 0.75rem 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       cursor: pointer;
     }
 
     .btn-secondary {
+      min-height: 46px;
       background: #fff;
       color: var(--ink);
       border: 1px solid var(--border);
       padding: 0.75rem 1rem;
-      border-radius: 10px;
+      border-radius: 12px;
       font-weight: 600;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       cursor: pointer;
+    }
+
+    /* Mobilā peldošā kopsavilkuma josla */
+    .mobile-sticky-bar {
+      display: none;
     }
 
     .toast {
       position: fixed;
-      bottom: 1.25rem;
-      right: 1.25rem;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
       background: var(--olive);
       color: #fff;
-      padding: 0.7rem 1.1rem;
-      border-radius: 8px;
+      padding: 0.75rem 1.2rem;
+      border-radius: 10px;
       font-size: 0.85rem;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.2s;
+      z-index: 100;
+      white-space: nowrap;
     }
 
     .toast.show { opacity: 1; }
 
+    /* RESPONSĪVIE NOTEIKUMI PLANŠETĒM UN TELEFONIEM */
+    @media (max-width: 960px) {
+      .overview-grid, .calc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .receipt-wrapper {
+        position: static;
+      }
+
+      .container {
+        margin-bottom: 5.5rem;
+      }
+
+      /* Mobilā apakšējā josla ātrai pārejai uz čeku */
+      .mobile-sticky-bar {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--olive);
+        color: #fff;
+        padding: 0.65rem 1rem calc(0.65rem + env(safe-area-inset-bottom));
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.75rem;
+        border-top: 3px solid var(--rust);
+        box-shadow: 0 -6px 20px rgba(0,0,0,0.16);
+        z-index: 90;
+      }
+
+      .mobile-bar-stats {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.76rem;
+        line-height: 1.2;
+      }
+
+      .mobile-bar-stats strong {
+        display: block;
+        font-size: 0.98rem;
+        color: #fff;
+      }
+
+      .mobile-bar-stats span {
+        color: #d3d9cc;
+      }
+
+      .mobile-bar-btn {
+        background: var(--rust);
+        color: #fff;
+        border: none;
+        border-radius: 9px;
+        padding: 0.55rem 0.9rem;
+        min-height: 40px;
+        font-weight: 700;
+        font-size: 0.82rem;
+        cursor: pointer;
+        white-space: nowrap;
+      }
+    }
+
+    @media (max-width: 560px) {
+      header { padding: 0.85rem 1rem; }
+      .panel { padding: 1.15rem 1rem; border-radius: 14px; }
+      .comp-table { font-size: 0.78rem; }
+      .comp-table th, .comp-table td { padding: 0.45rem 0.28rem; }
+
+      .demo-legend, .sector-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sector-card {
+        flex-direction: row;
+        align-items: center;
+        padding: 0.65rem 0.85rem;
+      }
+
+      .sector-hint { margin-top: 0; }
+
+      /* Telefonā skaitāmos pakalpojumus saliekam ērti 2 rindās */
+      .service-item.countable-row {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .service-item.countable-row .service-right {
+        justify-content: space-between;
+        padding-top: 0.55rem;
+        border-top: 1px dashed var(--border);
+      }
+
+      .service-item.countable-row .service-cost {
+        text-align: left;
+      }
+
+      .actions {
+        flex-direction: column;
+      }
+    }
+
     @media print {
-      header, .controls-panel, .actions { display: none; }
+      header, .overview-grid, .section-divider, .controls-panel, .actions, .mobile-sticky-bar { display: none !important; }
       body { background: #fff; }
-      main { display: block; margin: 0; padding: 0; }
+      .container { margin: 0; padding: 0; }
+      .calc-grid { display: block; }
       .receipt { box-shadow: none; border: 1px solid #000; }
     }
   </style>
@@ -489,8 +813,8 @@
     <div class="brand">
       <div class="crest">K</div>
       <div>
-        <h1 data-i18n="title">Tavs eiro Kuldīgā • Budžets 2026</h1>
-        <p data-i18n="subtitle">Kuldīgas novada pašvaldības budžeta un pakalpojumu caurspīdīguma čeks</p>
+        <h1 data-i18n="title">Kuldīgas novads skaitļos • Budžets 2026</h1>
+        <p data-i18n="subtitle">Budžeta dinamika, CSP statistika un iedzīvotāja čeks</p>
       </div>
     </div>
     <div class="lang-toggle">
@@ -500,85 +824,204 @@
   </div>
 </header>
 
-<main>
-  <!-- Left Panel: Citizen Inputs -->
-  <section class="panel controls-panel">
-    <span class="section-tag" data-i18n="badge">Apstiprinātais 2026. gada budžets (€56,54 milj.)</span>
-    <h2 data-i18n="heading">Kur nonāk Tavi nodokļi Kuldīgas novadā?</h2>
-    <p class="sub" data-i18n="intro">
-      2026. gadā <strong>78% no Tava iedzīvotāju ienākuma nodokļa (IIN)</strong> paliek Kuldīgas novada budžetā. Norādi bruto algu un izmantotos pakalpojumus — aprēķins notiek tikai Tavā ierīcē.
-    </p>
-
-    <div class="salary-box">
-      <div class="salary-top">
-        <label for="salaryRange" data-i18n="salaryLabel">Bruto mēnešalga ("uz papīra")</label>
-        <div class="salary-value" id="salaryDisplay">€1,400</div>
+<div class="container">
+  <!-- 1. SADAĻA: Kuldīgas novada 2025 vs 2026 pārskats un CSP dati -->
+  <section class="overview-grid">
+    <!-- Kreisais bloks: Budžeta salīdzinājuma tabula 2025 vs 2026 -->
+    <div class="panel">
+      <div class="badges-row">
+        <span class="section-tag" data-i18n="tableTag">Saistošie noteikumi Nr. 1/2026</span>
+        <span class="section-tag csp" data-i18n="tableSubTag">2025. g. pret 2026. g.</span>
       </div>
-      <input type="range" id="salaryRange" min="780" max="4500" step="20" value="1400" />
-      <div class="presets">
-        <button class="preset-btn" onclick="setSalary(780)" data-i18n="presetMin">€780 (Minimālā 2026)</button>
-        <button class="preset-btn" onclick="setSalary(1150)">€1,150</button>
-        <button class="preset-btn" onclick="setSalary(1400)" data-i18n="presetAvg">€1,400 (Vidējā)</button>
-        <button class="preset-btn" onclick="setSalary(2000)">€2,000</button>
-        <button class="preset-btn" onclick="setSalary(3000)">€3,000</button>
-      </div>
+      <h2 data-i18n="tableTitle">Kuldīgas novada budžeta izmaiņas (2025 → 2026)</h2>
+      <p class="sub" data-i18n="tableDesc">
+        Pamatbudžeta ieņēmumu un izdevumu salīdzinājums pa galvenajām nozarēm (milj. €) un procentuālās izmaiņas pret 2025. gadu:
+      </p>
 
-      <div class="dependents-row">
-        <span data-i18n="dependentsLabel">Apgādājamie (bērni):</span>
-        <div class="stepper">
-          <button onclick="changeDependents(-1)">−</button>
-          <strong id="dependentsCount">1</strong>
-          <button onclick="changeDependents(1)">+</button>
-        </div>
+      <div class="table-wrap">
+        <table class="comp-table">
+          <thead>
+            <tr>
+              <th data-i18n="colCategory">Budžeta pozīcija / Nozare</th>
+              <th class="num">2025</th>
+              <th class="num">2026</th>
+              <th class="num" data-i18n="colChange">Izmaiņas</th>
+            </tr>
+          </thead>
+          <tbody id="comparisonTableBody"></tbody>
+        </table>
       </div>
     </div>
 
-    <div class="services-title" data-i18n="servicesHeading">Ko Tava ģimene izmanto Kuldīgas novadā?</div>
-    <p class="sub" style="margin-bottom:0.5rem; font-size:0.84rem;" data-i18n="servicesSub">
-      Salīdzini savu IIN ieguldījumu ar pašvaldības budžeta izmaksām (rēķinot uz 26 666 novada iedzīvotājiem):
-    </p>
+    <!-- Labais bloks: CSP Iedzīvotāju sastāvs + Vidējā alga sektoros -->
+    <div class="right-stack">
+      <div class="panel">
+        <div class="badges-row">
+          <span class="section-tag csp" id="cspPopTag">CSP dati • Kuldīgas novads</span>
+        </div>
+        <h2 data-i18n="demoTitle">Iedzīvotāju skaits un sastāvs</h2>
+        <div class="pop-hero">
+          <div class="pop-big" id="popBigNumber">26 666</div>
+          <div class="pop-sub-stat" id="popSubStat"></div>
+        </div>
 
-    <div class="services-grid" id="servicesList"></div>
+        <div class="stacked-bar">
+          <div class="seg-work" style="width: 62.5%"></div>
+          <div class="seg-senior" style="width: 23.0%"></div>
+          <div class="seg-youth" style="width: 14.5%"></div>
+        </div>
+
+        <div class="demo-legend">
+          <div class="demo-box">
+            <span class="demo-label"><span class="demo-dot" style="background:var(--olive)"></span><span data-i18n="ageWork">Darbspējas (63%)</span></span>
+            <span class="demo-val" id="valWork">16 912</span>
+          </div>
+          <div class="demo-box">
+            <span class="demo-label"><span class="demo-dot" style="background:var(--rust)"></span><span data-i18n="ageSenior">Virs darbsp. (23%)</span></span>
+            <span class="demo-val" id="valSenior">6 259</span>
+          </div>
+          <div class="demo-box">
+            <span class="demo-label"><span class="demo-dot" style="background:var(--gold)"></span><span data-i18n="ageYouth">Līdz darbsp. (15%)</span></span>
+            <span class="demo-val" id="valYouth">4 192</span>
+          </div>
+        </div>
+
+        <div class="mini-kpis" id="miniKpisRow"></div>
+      </div>
+
+      <div class="panel">
+        <div class="badges-row">
+          <span class="section-tag" id="sectorPeriodTag">CSP DSV040 • Bruto alga</span>
+        </div>
+        <h2 data-i18n="sectorTitle">Vidējā alga Kuldīgas novadā pa sektoriem</h2>
+        <p class="sub" style="margin-bottom:0.8rem;" data-i18n="sectorDesc">
+          Pieskaries sektoram, lai uzreiz pārrēķinātu savu IIN čeku zemāk:
+        </p>
+
+        <div class="sector-grid">
+          <button class="sector-card" onclick="applySectorSalary('total')">
+            <div>
+              <span class="sector-title" data-i18n="secTotal">Novadā kopā</span>
+              <span class="sector-amt" id="secTotalVal">€1,385</span>
+            </div>
+            <span class="sector-hint" data-i18n="secClick">Ievietot čekā →</span>
+          </button>
+          <button class="sector-card" onclick="applySectorSalary('public')">
+            <div>
+              <span class="sector-title" data-i18n="secPublic">Sabiedriskais sek.</span>
+              <span class="sector-amt" id="secPublicVal">€1,460</span>
+            </div>
+            <span class="sector-hint" data-i18n="secClick">Ievietot čekā →</span>
+          </button>
+          <button class="sector-card" onclick="applySectorSalary('private')">
+            <div>
+              <span class="sector-title" data-i18n="secPrivate">Privātais sektors</span>
+              <span class="sector-amt" id="secPrivateVal">€1,345</span>
+            </div>
+            <span class="sector-hint" data-i18n="secClick">Ievietot čekā →</span>
+          </button>
+        </div>
+      </div>
+    </div>
   </section>
 
-  <!-- Right Panel: Live Thermal Receipt -->
-  <aside class="receipt-wrapper">
-    <div class="receipt" id="receiptCard">
-      <div class="receipt-header">
-        <h3 data-i18n="receiptTitle">KULDĪGAS NOVADA PAŠVALDĪBA</h3>
-        <div class="receipt-meta">
-          <span data-i18n="receiptSub">2026. GADA IIN SADALĪJUMA ČEKS</span> • <span id="receiptDate"></span><br/>
-          <span>SAISTOŠIE NOTEIKUMI NR. 1/2026</span>
+  <div class="section-divider" data-i18n="dividerText">Interaktīvais iedzīvotāja nodokļu un pakalpojumu čeks</div>
+
+  <!-- 2. SADAĻA: Interaktīvais čeks -->
+  <section class="calc-grid" id="calculatorSection">
+    <div class="panel controls-panel">
+      <div class="badges-row">
+        <span class="section-tag" data-i18n="badge">Budžets 2026 (€56,54 milj.)</span>
+        <span class="section-tag csp" id="cspStatusBadge">CSP dati: 26 666 iedz.</span>
+      </div>
+      <h2 data-i18n="heading">Kur nonāk Tavi nodokļi Kuldīgas novadā?</h2>
+      <p class="sub" data-i18n="intro">
+        2026. gadā <strong>78% no Tava iedzīvotāju ienākuma nodokļa (IIN)</strong> paliek Kuldīgas novada budžetā. Norādi bruto algu, bērnu skaitu un izmantotos pakalpojumus — aprēķins notiek tikai Tavā ierīcē.
+      </p>
+
+      <div class="salary-box">
+        <div class="salary-top">
+          <label for="salaryRange" data-i18n="salaryLabel">Bruto mēnešalga ("uz papīra")</label>
+          <div class="salary-value" id="salaryDisplay">€1,385</div>
+        </div>
+        <input type="range" id="salaryRange" min="780" max="4500" step="15" value="1385" />
+        <div class="presets">
+          <button class="preset-btn" onclick="setSalary(780)" data-i18n="presetMin">€780 (Minimālā 2026)</button>
+          <button class="preset-btn" id="avgSalaryBtn" onclick="setSalary(1385)">€1,385 (CSP vidējā)</button>
+          <button class="preset-btn" onclick="setSalary(1800)">€1,800</button>
+          <button class="preset-btn" onclick="setSalary(2500)">€2,500</button>
+        </div>
+
+        <div class="dependents-row">
+          <div>
+            <strong data-i18n="dependentsLabel">Apgādājamie bērni:</strong>
+            <div style="font-size:0.75rem; color:var(--muted);" data-i18n="dependentsHint">Ietekmē gan IIN atvieglojumu (€250/mēn.), gan izglītības pakalpojumu apjomu</div>
+          </div>
+          <div class="stepper">
+            <button onclick="changeDependents(-1)" aria-label="Samazināt bērnu skaitu">−</button>
+            <strong id="dependentsCount">1</strong>
+            <button onclick="changeDependents(1)" aria-label="Palielināt bērnu skaitu">+</button>
+          </div>
         </div>
       </div>
 
-      <div id="budgetLines"></div>
+      <div class="services-title" data-i18n="servicesHeading">Ko Tava ģimene izmanto Kuldīgas novadā?</div>
+      <p class="sub" style="margin-bottom:0.5rem; font-size:0.84rem;" id="servicesSubText"></p>
 
-      <div class="receipt-total">
-        <span data-i18n="totalTaxLabel">TAVS IIN KULDĪGAI (78%) / GADĀ</span>
-        <span id="totalMunicipalTax">€0</span>
-      </div>
+      <div class="services-grid" id="servicesList"></div>
+    </div>
 
-      <div class="value-box">
-        <div class="value-row">
-          <span data-i18n="serviceValueLabel">Izmantoto pakalpojumu vērtība:</span>
-          <span class="value-highlight" id="totalServiceValue">€0 / gadā</span>
+    <aside class="receipt-wrapper" id="receiptSection">
+      <div class="receipt" id="receiptCard">
+        <div class="receipt-header">
+          <h3 data-i18n="receiptTitle">KULDĪGAS NOVADA PAŠVALDĪBA</h3>
+          <div class="receipt-meta">
+            <span data-i18n="receiptSub">2026. GADA IIN SADALĪJUMA ČEKS</span> • <span id="receiptDate"></span><br/>
+            <span>SAISTOŠIE NOTEIKUMI NR. 1/2026</span>
+          </div>
         </div>
-        <p class="value-note" id="valueComparisonText"></p>
+
+        <div id="budgetLines"></div>
+
+        <div class="receipt-total">
+          <span data-i18n="totalTaxLabel">TAVS IIN KULDĪGAI (78%) / GADĀ</span>
+          <span id="totalMunicipalTax">€0</span>
+        </div>
+
+        <div class="value-box">
+          <div class="value-row">
+            <span data-i18n="serviceValueLabel">Izmantoto pakalpojumu vērtība:</span>
+            <span class="value-highlight" id="totalServiceValue">€0 / gadā</span>
+          </div>
+          <div class="value-breakdown" id="serviceBreakdownText"></div>
+          <p class="value-note" id="valueComparisonText"></p>
+        </div>
+
+        <div class="receipt-footer" id="receiptFooterText"></div>
       </div>
 
-      <div class="receipt-footer" data-i18n="receiptFooter">
-        Kopbudžets 2026: €56,54 milj. • IIN ieņēmumi: €21,09 milj.<br/>
-        Paldies, ka veido Kuldīgas novadu kopā ar mums!
+      <div class="actions">
+        <button class="btn-primary" onclick="copyShareSummary()" data-i18n="shareBtn">Kopēt kopsavilkumu</button>
+        <button class="btn-secondary" onclick="window.print()" data-i18n="printBtn">Drukāt / PDF</button>
       </div>
-    </div>
+    </aside>
+  </section>
+</div>
 
-    <div class="actions">
-      <button class="btn-primary" onclick="copyShareSummary()" data-i18n="shareBtn">Kopēt kopsavilkumu</button>
-      <button class="btn-secondary" onclick="window.print()" data-i18n="printBtn">Drukāt / PDF</button>
+<!-- Mobilā apakšējā josla telefoniem -->
+<div class="mobile-sticky-bar" id="mobileStickyBar">
+  <div class="mobile-bar-stats">
+    <div>
+      <span data-i18n="mobTaxLabel">IIN Kuldīgai:</span>
+      <strong id="mobTaxVal">€0</strong>
     </div>
-  </aside>
-</main>
+    <div>
+      <span data-i18n="mobValLabel">Pakalpojumi:</span>
+      <strong id="mobServiceVal">€0</strong>
+    </div>
+  </div>
+  <button class="mobile-bar-btn" onclick="scrollToReceipt()" data-i18n="mobJumpBtn">Skatīt čeku ↓</button>
+</div>
 
 <div class="toast" id="toast"></div>
 
@@ -586,62 +1029,146 @@
   let lang = 'lv';
   let dependents = 1;
 
+  let stats = {
+    population: 26666,
+    populationYear: "2025/2026 (CSP)",
+    populationChangeSince2021Pct: -3.8,
+    demographics: {
+      workingAge: 16912,
+      workingAgePct: 63,
+      aboveWorkingAge: 6259,
+      aboveWorkingAgePct: 23,
+      underWorkingAge: 4192,
+      underWorkingAgePct: 15,
+      unemploymentPct: 4.3,
+      unemploymentLatviaPct: 5.0,
+      activeBusinesses: 2956
+    },
+    avgGrossSalary: 1385,
+    salaryBySector: {
+      period: "CSP DSV040",
+      total: 1385,
+      public: 1460,
+      private: 1345
+    },
+    updatedAt: "2026-11-12",
+    serviceCosts: {
+      kindergartenPerChild: 4200,
+      schoolPerStudent: 1550,
+      artsSportPerChild: 1100,
+      urbanEnvTotalEur: 14518603,
+      cultureSportTotalEur: 4344069
+    }
+  };
+
+  const budgetComparisonRows = [
+    { group: true, lv: "KOPBUDŽETS", en: "OVERALL BUDGET", v25: "—", v26: "—", pct: null },
+    { lv: "Budžeta ieņēmumi", en: "Budget Revenue", v25: "€53,03 M", v26: "€52,73 M", pct: -0.62 },
+    { lv: "Budžeta izdevumi (pamatbudžets)", en: "Budget Expenditure", v25: "€53,66 M", v26: "€56,54 M", pct: 5.29 },
+    { group: true, lv: "IZDEVUMI PA NOZARĒM", en: "EXPENDITURE BY SECTOR", v25: "—", v26: "—", pct: null },
+    { lv: "Izglītība (45,5% no budžeta)", en: "Education (45.5% of budget)", v25: "€24,22 M", v26: "€25,74 M", pct: 6.3 },
+    { lv: "Teritoriju apsaimniekošana un vide", en: "Territories, Housing & Environment", v25: "€11,65 M", v26: "€11,89 M", pct: 2.0 },
+    { lv: "Sociālā aizsardzība un veselība", en: "Social Protection & Health", v25: "€5,85 M", v26: "€6,62 M", pct: 13.2 },
+    { lv: "Vispārējā pārvaldība un drošība", en: "Administration & Public Safety", v25: "€4,82 M", v26: "€5,31 M", pct: 10.2 },
+    { lv: "Kultūra, atpūta un sports", en: "Culture, Recreation & Sports", v25: "€4,67 M", v26: "€4,34 M", pct: -7.0 },
+    { lv: "Autoceļi, ielas un tūrisms", en: "Roads, Streets & Tourism", v25: "€2,43 M", v26: "€2,63 M", pct: 8.4 }
+  ];
+
   const i18n = {
     lv: {
-      title: "Tavs eiro Kuldīgā • Budžets 2026",
-      subtitle: "Kuldīgas novada pašvaldības budžeta un pakalpojumu caurspīdīguma čeks",
-      badge: "Apstiprinātais 2026. gada budžets (€56,54 milj.)",
+      title: "Kuldīgas novads skaitļos • Budžets 2026",
+      subtitle: "Budžeta dinamika, CSP statistika un iedzīvotāja čeks",
+      tableTag: "Saistošie noteikumi Nr. 1/2026",
+      tableSubTag: "2025. g. pret 2026. g.",
+      tableTitle: "Kuldīgas novada budžeta izmaiņas (2025 → 2026)",
+      tableDesc: "Pamatbudžeta ieņēmumu un izdevumu salīdzinājums pa galvenajām nozarēm (milj. €) un procentuālās izmaiņas pret 2025. gadu:",
+      colCategory: "Budžeta pozīcija / Nozare",
+      colChange: "Izmaiņas",
+      demoTitle: "Iedzīvotāju skaits un sastāvs",
+      ageWork: "Darbspējas (63%)",
+      ageSenior: "Virs darbsp. (23%)",
+      ageYouth: "Līdz darbsp. (15%)",
+      sectorTitle: "Vidējā alga Kuldīgas novadā pa sektoriem",
+      sectorDesc: "Pieskaries sektoram, lai uzreiz pārrēķinātu savu IIN čeku zemāk:",
+      secTotal: "Novadā kopā",
+      secPublic: "Sabiedriskais sek.",
+      secPrivate: "Privātais sektors",
+      secClick: "Ievietot čekā →",
+      dividerText: "Interaktīvais iedzīvotāja nodokļu un pakalpojumu čeks",
+      badge: "Budžets 2026 (€56,54 milj.)",
       heading: "Kur nonāk Tavi nodokļi Kuldīgas novadā?",
-      intro: "2026. gadā <strong>78% no Tava iedzīvotāju ienākuma nodokļa (IIN)</strong> paliek Kuldīgas novada budžetā. Norādi bruto algu un izmantotos pakalpojumus — aprēķins notiek tikai Tavā ierīcē.",
+      intro: "2026. gadā <strong>78% no Tava iedzīvotāju ienākuma nodokļa (IIN)</strong> paliek Kuldīgas novada budžetā. Norādi bruto algu, bērnu skaitu un izmantotos pakalpojumus — aprēķins notiek tikai Tavā ierīcē.",
       salaryLabel: "Bruto mēnešalga (\"uz papīra\")",
       presetMin: "€780 (Minimālā 2026)",
-      presetAvg: "€1,400 (Vidējā)",
-      dependentsLabel: "Apgādājamie (bērni):",
+      dependentsLabel: "Apgādājamie bērni:",
+      dependentsHint: "Ietekmē gan IIN atvieglojumu (€250/mēn.), gan izglītības pakalpojumu apjomu",
       servicesHeading: "Ko Tava ģimene izmanto Kuldīgas novadā?",
-      servicesSub: "Salīdzini savu IIN ieguldījumu ar pašvaldības budžeta izmaksām (rēķinot uz 26 666 novada iedzīvotājiem):",
       receiptTitle: "KULDĪGAS NOVADA PAŠVALDĪBA",
       receiptSub: "2026. GADA IIN SADALĪJUMA ČEKS",
       totalTaxLabel: "TAVS IIN KULDĪGAI (78%) / GADĀ",
       serviceValueLabel: "Izmantoto pakalpojumu vērtība:",
-      receiptFooter: "Kopbudžets 2026: €56,54 milj. • IIN ieņēmumi: €21,09 milj.<br/>Paldies, ka veido Kuldīgas novadu kopā ar mums!",
       shareBtn: "Kopēt kopsavilkumu",
       printBtn: "Drukāt / PDF",
-      copied: "Čeka kopsavilkums nokopēts starpliktuvē!",
+      copied: "Čeka kopsavilkums nokopēts!",
+      mobTaxLabel: "IIN Kuldīgai:",
+      mobValLabel: "Pakalpojumi:",
+      mobJumpBtn: "Skatīt čeku ↓",
       yr: "/ gadā",
+      perChild: "/ bērnam",
+      childrenUnit: (n) => n === 1 ? "1 bērns" : `${n} bērni`,
       compHigher: (diff) => `Pašvaldība Tavas ģimenes pakalpojumos iegulda par €${diff.toLocaleString()} vairāk nekā Tavs tiešais IIN maksājums (pateicoties valsts mērķdotācijām un €2,53 milj. ES projektu līdzfinansējumam).`,
       compLower: (diff) => `Tavs nodokļu pienesums sedz visus izvēlētos pakalpojumus un vēl €${diff.toLocaleString()} novada kopējiem ceļiem, 1905. gada parkam un UNESCO vecpilsētai!`
     },
     en: {
-      title: "Your Euro in Kuldīga • 2026 Budget",
-      subtitle: "Kuldīga Municipality Citizen Budget & Public Value Transparency Receipt",
-      badge: "Approved 2026 Budget (€56.54M)",
+      title: "Kuldīga Municipality in Numbers • 2026",
+      subtitle: "Budget dynamics, CSB statistics, and citizen tax receipt",
+      tableTag: "Binding Regulations No. 1/2026",
+      tableSubTag: "2025 vs. 2026",
+      tableTitle: "Kuldīga Budget Comparison (2025 → 2026)",
+      tableDesc: "Comparison of core municipal revenue and expenditure by sector (€ millions) and percentage change from 2025:",
+      colCategory: "Budget Line / Sector",
+      colChange: "Change",
+      demoTitle: "Population & Age Composition",
+      ageWork: "Working age (63%)",
+      ageSenior: "Above work. (23%)",
+      ageYouth: "Under work. (15%)",
+      sectorTitle: "Average Gross Salary by Sector in Kuldīga",
+      sectorDesc: "Tap any sector below to load its average salary directly into the tax receipt:",
+      secTotal: "All Sectors",
+      secPublic: "Public Sector",
+      secPrivate: "Private Sector",
+      secClick: "Apply to receipt →",
+      dividerText: "Interactive Citizen Tax & Public Services Receipt",
+      badge: "2026 Budget (€56.54M)",
       heading: "Where do your taxes go in Kuldīga?",
-      intro: "In 2026, <strong>78% of your Personal Income Tax (IIN)</strong> stays directly in Kuldīga Municipality. Adjust your gross salary and services used—everything calculates privately in your browser.",
+      intro: "In 2026, <strong>78% of your Personal Income Tax (IIN)</strong> stays directly in Kuldīga Municipality. Adjust your gross salary, number of children, and services used—everything calculates privately in your browser.",
       salaryLabel: "Gross Monthly Salary",
       presetMin: "€780 (2026 Min. Wage)",
-      presetAvg: "€1,400 (Average)",
-      dependentsLabel: "Dependents (children):",
+      dependentsLabel: "Dependent children:",
+      dependentsHint: "Adjusts both your IIN tax relief (€250/mo) and household education services",
       servicesHeading: "Which Kuldīga services does your household use?",
-      servicesSub: "Compare your annual income tax contribution against Kuldīga's real 2026 budget allocations (across 26,666 residents):",
       receiptTitle: "KULDĪGA MUNICIPALITY",
       receiptSub: "2026 CITIZEN TAX RECEIPT",
       totalTaxLabel: "YOUR MUNICIPAL TAX (78%) / YEAR",
       serviceValueLabel: "Public services value used:",
-      receiptFooter: "2026 Total Budget: €56.54M • Municipal IIN Revenue: €21.09M<br/>Thank you for building Kuldīga Municipality together!",
       shareBtn: "Copy Summary",
       printBtn: "Print / PDF",
-      copied: "Receipt summary copied to clipboard!",
+      copied: "Receipt summary copied!",
+      mobTaxLabel: "Tax to Kuldīga:",
+      mobValLabel: "Services value:",
+      mobJumpBtn: "View receipt ↓",
       yr: "/ yr",
+      perChild: "/ child",
+      childrenUnit: (n) => n === 1 ? "1 child" : `${n} children`,
       compHigher: (diff) => `The municipality invests €${diff.toLocaleString()} more in your household's services than your direct income tax share (backed by state grants & €2.53M in EU funds).`,
       compLower: (diff) => `Your tax contribution covers all selected services plus an extra €${diff.toLocaleString()} toward shared roads, 1905 Park, and UNESCO Old Town heritage!`
     }
   };
 
-  // EXACT 2026 Kuldīga Municipality Functional Breakdown (Total: €56,542,779)
   const categories = [
     {
       id: 'edu',
-      pct: 0.4553, // €25,744,719 (45.5%)
+      pct: 0.4553,
       lv: 'Izglītība (skolas, bērnudārzi, brīvpusdienas)',
       en: 'Education (Schools, Kindergartens & Free Meals)',
       projLv: 'T.sk. €741k brīvpusdienām, €105k skolēnu transportam, Skrundas skolas un stadiona pārbūvei',
@@ -649,7 +1176,7 @@
     },
     {
       id: 'terr',
-      pct: 0.2102, // €11,699,861 + €185,339 = €11,885,200 (21.0%)
+      pct: 0.2102,
       lv: 'Teritorijas, apgaismojums, parki un vide',
       en: 'Territories, Street Lighting, Parks & Environment',
       projLv: 'T.sk. 1905. gada parka pārbūve (€519,8k), vecpilsētas ēku restaurācija (€120k), pagalmi (€50k)',
@@ -657,7 +1184,7 @@
     },
     {
       id: 'soc',
-      pct: 0.1171, // €6,445,855 + €175,786 = €6,621,641 (11.7%)
+      pct: 0.1171,
       lv: 'Sociālais atbalsts un veselības veicināšana',
       en: 'Social Protection & Community Health',
       projLv: 'T.sk. mājokļa pabalsti (€679k), aprūpe mājās (€213k), bezmaksas veselības nodarbības (€115k)',
@@ -665,7 +1192,7 @@
     },
     {
       id: 'admin',
-      pct: 0.0940, // €4,733,747 + €580,000 = €5,313,747 (9.4%)
+      pct: 0.0940,
       lv: 'Pārvaldība, pašvaldības policija un drošība',
       en: 'Administration, Municipal Police & Civil Safety',
       projLv: 'T.sk. patvertņu ierīkošana (€320,6k), videonovērošana, glābšanas dienests Mārtiņsalā',
@@ -673,7 +1200,7 @@
     },
     {
       id: 'cult',
-      pct: 0.0768, // €4,344,069 (7.7%)
+      pct: 0.0768,
       lv: 'Kultūra, bibliotēkas, sports un mantojums',
       en: 'Culture, Libraries, Sports & Heritage',
       projLv: 'T.sk. Vecpilsētas svētki (€140k), EKG 2027 (€165,5k), Galvenā bibliotēka, Adatu fabrika',
@@ -681,7 +1208,7 @@
     },
     {
       id: 'roads',
-      pct: 0.0466, // €2,633,403 (4.7%)
+      pct: 0.0466,
       lv: 'Autoceļi, ielu infrastruktūra un tūrisms',
       en: 'Municipal Roads, Streets & Tourism',
       projLv: 'T.sk. Skolas/Pasta/Jelgavas un Ēdoles ielu pārbūve, pagastu ceļi (€1,93 milj.)',
@@ -689,56 +1216,140 @@
     }
   ];
 
-  // Grounded in Kuldīga's 2026 budget & 26,666 population
-  const services = [
-    {
-      id: 'kg',
-      cost: 4200,
-      checked: true,
-      lv: '1 bērns Kuldīgas novada bērnudārzā',
-      en: '1 child in municipal kindergarten',
-      descLv: 'Pašvaldības pirmsskolas uzturēšanas izmaksas (€4,41 milj. budžets)',
-      descEn: 'Municipal preschool operating cost (€4.41M total budget)'
-    },
-    {
-      id: 'school',
-      cost: 1550,
-      checked: false,
-      lv: 'Skolēns novada skolā + brīvpusdienas + transports',
-      en: 'Student in local school + free meals + transit',
-      descLv: 'T.sk. pašvaldības brīvpusdienas (€741k) un skolēnu transports (€105k)',
-      descEn: 'Incl. municipal free school lunches (€741k) & student buses (€105k)'
-    },
-    {
-      id: 'arts',
-      cost: 1100,
-      checked: false,
-      lv: 'Mūzikas, mākslas vai sporta skola',
-      en: 'Music, Art, or Sports School',
-      descLv: 'Profesionālās ievirzes un interešu izglītība (€3,92 milj. budžets)',
-      descEn: 'Specialized & interest education (€3.92M budget)'
-    },
-    {
-      id: 'urban',
-      cost: 544,
-      checked: true,
-      lv: 'Sakoptas ielas, apgaismojums, parki un vide',
-      en: 'Maintained streets, lighting, parks & environment',
-      descLv: '€14,52 milj. teritorijām, videi un ceļiem ÷ 26 666 iedzīvotājiem',
-      descEn: '€14.52M for territories, environment & roads ÷ 26,666 residents'
-    },
-    {
-      id: 'cult_lib',
-      cost: 163,
-      checked: true,
-      lv: 'Bibliotēkas, muzejs, kultūras pasākumi un sports',
-      en: 'Libraries, museum, cultural events & sports',
-      descLv: '€4,34 milj. kultūrai un sportam ÷ 26 666 iedzīvotājiem',
-      descEn: '€4.34M for culture & sports ÷ 26,666 residents'
-    }
-  ];
+  let services = [];
+
+  function scrollToReceipt() {
+    document.getElementById('receiptSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function renderOverview() {
+    const tbody = document.getElementById('comparisonTableBody');
+    tbody.innerHTML = budgetComparisonRows.map(r => {
+      if (r.group) {
+        return `<tr class="group-row"><td colspan="4">${lang === 'lv' ? r.lv : r.en}</td></tr>`;
+      }
+      const isPos = r.pct >= 0;
+      const sign = isPos ? '+' : '';
+      const cls = isPos ? 'delta-pos' : 'delta-neg';
+      return `
+        <tr>
+          <td>${lang === 'lv' ? r.lv : r.en}</td>
+          <td class="num">${r.v25}</td>
+          <td class="num"><strong>${r.v26}</strong></td>
+          <td class="num"><span class="delta-pill ${cls}">${sign}${r.pct.toFixed(1)}%</span></td>
+        </tr>
+      `;
+    }).join('');
+
+    const popFmt = stats.population.toLocaleString();
+    document.getElementById('popBigNumber').textContent = popFmt;
+    document.getElementById('popSubStat').textContent = lang === 'lv'
+      ? `37% Kuldīgas pilsētā • ${stats.populationChangeSince2021Pct}% kopš 2021. g. (${stats.populationYear})`
+      : `37% in Kuldīga town • ${stats.populationChangeSince2021Pct}% since 2021 (${stats.populationYear})`;
+
+    document.getElementById('valWork').textContent = stats.demographics.workingAge.toLocaleString();
+    document.getElementById('valSenior').textContent = stats.demographics.aboveWorkingAge.toLocaleString();
+    document.getElementById('valYouth').textContent = stats.demographics.underWorkingAge.toLocaleString();
+
+    document.getElementById('miniKpisRow').innerHTML = lang === 'lv'
+      ? `<span>Bezdarba līmenis: <strong>${stats.demographics.unemploymentPct}%</strong> (LV: ${stats.demographics.unemploymentLatviaPct}%)</span>
+         <span>Aktīvie uzņēmumi: <strong>${stats.demographics.activeBusinesses.toLocaleString()}</strong></span>`
+      : `<span>Unemployment: <strong>${stats.demographics.unemploymentPct}%</strong> (LV: ${stats.demographics.unemploymentLatviaPct}%)</span>
+         <span>Active businesses: <strong>${stats.demographics.activeBusinesses.toLocaleString()}</strong></span>`;
+
+    document.getElementById('sectorPeriodTag').textContent = `${stats.salaryBySector.period} • Bruto / mēn.`;
+    document.getElementById('secTotalVal').textContent = `€${stats.salaryBySector.total.toLocaleString()}`;
+    document.getElementById('secPublicVal').textContent = `€${stats.salaryBySector.public.toLocaleString()}`;
+    document.getElementById('secPrivateVal').textContent = `€${stats.salaryBySector.private.toLocaleString()}`;
+  }
+
+  function applySectorSalary(sectorKey) {
+    const val = stats.salaryBySector[sectorKey] || stats.avgGrossSalary;
+    setSalary(val);
+    document.getElementById('calculatorSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function buildServicesFromStats() {
+    const pop = stats.population;
+    const urbanPerCap = Math.round(stats.serviceCosts.urbanEnvTotalEur / pop);
+    const cultPerCap = Math.round(stats.serviceCosts.cultureSportTotalEur / pop);
+
+    services = [
+      {
+        id: 'kg',
+        type: 'countable',
+        count: 1,
+        cost: stats.serviceCosts.kindergartenPerChild,
+        lv: 'Bērni Kuldīgas novada bērnudārzā',
+        en: 'Children in municipal kindergarten',
+        descLv: 'Pašvaldības pirmsskolas uzturēšanas izmaksas (€4,41 milj. budžets)',
+        descEn: 'Municipal preschool operating cost (€4.41M total budget)'
+      },
+      {
+        id: 'school',
+        type: 'countable',
+        count: 0,
+        cost: stats.serviceCosts.schoolPerStudent,
+        lv: 'Skolēni novada skolā + brīvpusdienas + transports',
+        en: 'Students in local school + free meals + transit',
+        descLv: 'T.sk. pašvaldības brīvpusdienas (€741k) un skolēnu transports (€105k)',
+        descEn: 'Incl. municipal free school lunches (€741k) & student buses (€105k)'
+      },
+      {
+        id: 'arts',
+        type: 'countable',
+        count: 0,
+        cost: stats.serviceCosts.artsSportPerChild,
+        lv: 'Bērni mūzikas, mākslas vai sporta skolā',
+        en: 'Children in Music, Art, or Sports School',
+        descLv: 'Profesionālās ievirzes un interešu izglītība (€3,92 milj. budžets)',
+        descEn: 'Specialized & interest education (€3.92M budget)'
+      },
+      {
+        id: 'urban',
+        type: 'toggle',
+        checked: true,
+        cost: urbanPerCap,
+        lv: 'Sakoptas ielas, apgaismojums, parki un vide',
+        en: 'Maintained streets, lighting, parks & environment',
+        descLv: `€14,52 milj. teritorijām, videi un ceļiem ÷ ${pop.toLocaleString()} iedzīvotājiem`,
+        descEn: `€14.52M for territories, environment & roads ÷ ${pop.toLocaleString()} residents`
+      },
+      {
+        id: 'cult_lib',
+        type: 'toggle',
+        checked: true,
+        cost: cultPerCap,
+        lv: 'Bibliotēkas, muzejs, kultūras pasākumi un sports',
+        en: 'Libraries, museum, cultural events & sports',
+        descLv: `€4,34 milj. kultūrai un sportam ÷ ${pop.toLocaleString()} iedzīvotājiem`,
+        descEn: `€4.34M for culture & sports ÷ ${pop.toLocaleString()} residents`
+      }
+    ];
+  }
 
   const salaryRange = document.getElementById('salaryRange');
+
+  function updateDynamicTexts() {
+    const popFmt = stats.population.toLocaleString();
+    document.getElementById('cspStatusBadge').textContent = lang === 'lv'
+      ? `CSP dati: ${popFmt} iedz.`
+      : `CSB Data: ${popFmt} pop.`;
+
+    const avgBtn = document.getElementById('avgSalaryBtn');
+    avgBtn.textContent = lang === 'lv'
+      ? `€${stats.avgGrossSalary.toLocaleString()} (CSP vidējā)`
+      : `€${stats.avgGrossSalary.toLocaleString()} (CSB avg.)`;
+    avgBtn.onclick = () => setSalary(stats.avgGrossSalary);
+
+    document.getElementById('servicesSubText').textContent = lang === 'lv'
+      ? `Norādi bērnu skaitu izglītības iestādēs un atzīmē kopējos pakalpojumus (rēķinot uz ${popFmt} novada iedzīvotājiem):`
+      : `Set the number of children in education and select shared municipal services (across ${popFmt} residents):`;
+
+    document.getElementById('receiptFooterText').innerHTML = lang === 'lv'
+      ? `Avots: CSP & Kuldīgas novada budžets 2026 (€56,54 milj.) • Atjaunots: ${stats.updatedAt}<br/>Paldies, ka veido Kuldīgas novadu kopā ar mums!`
+      : `Source: CSB & Kuldīga 2026 Budget (€56.54M) • Updated: ${stats.updatedAt}<br/>Thank you for building Kuldīga Municipality together!`;
+  }
 
   function setLang(newLang) {
     lang = newLang;
@@ -748,6 +1359,8 @@
       const key = el.getAttribute('data-i18n');
       if (i18n[lang][key]) el.innerHTML = i18n[lang][key];
     });
+    renderOverview();
+    updateDynamicTexts();
     renderServices();
     calculate();
   }
@@ -760,45 +1373,105 @@
   function changeDependents(delta) {
     dependents = Math.max(0, Math.min(6, dependents + delta));
     document.getElementById('dependentsCount').textContent = dependents;
+
+    const kg = services.find(s => s.id === 'kg');
+    const school = services.find(s => s.id === 'school');
+
+    if (dependents === 0) {
+      services.filter(s => s.type === 'countable').forEach(s => s.count = 0);
+    } else if (delta > 0) {
+      if ((kg.count + school.count) < dependents) {
+        if (school.count > 0 && kg.count === 0) school.count += 1;
+        else kg.count += 1;
+      }
+    } else if (delta < 0) {
+      if ((kg.count + school.count) > dependents) {
+        if (kg.count > 0) kg.count -= 1;
+        else if (school.count > 0) school.count -= 1;
+      }
+    }
+
+    renderServices();
+    calculate();
+  }
+
+  function changeServiceCount(id, delta) {
+    const srv = services.find(s => s.id === id);
+    if (!srv) return;
+    srv.count = Math.max(0, Math.min(5, srv.count + delta));
+    renderServices();
     calculate();
   }
 
   function toggleService(id) {
     const srv = services.find(s => s.id === id);
-    if (srv) srv.checked = !srv.checked;
-    renderServices();
-    calculate();
+    if (srv && srv.type === 'toggle') {
+      srv.checked = !srv.checked;
+      renderServices();
+      calculate();
+    }
   }
 
   function renderServices() {
     const container = document.getElementById('servicesList');
-    container.innerHTML = services.map(s => `
-      <div class="service-item ${s.checked ? 'checked' : ''}" onclick="toggleService('${s.id}')">
-        <div class="service-left">
-          <input type="checkbox" ${s.checked ? 'checked' : ''} onclick="event.stopPropagation(); toggleService('${s.id}')" />
-          <div>
-            <span class="service-name">${lang === 'lv' ? s.lv : s.en}</span>
-            <span class="service-desc">${lang === 'lv' ? s.descLv : s.descEn}</span>
+    container.innerHTML = services.map(s => {
+      if (s.type === 'countable') {
+        const isActive = s.count > 0;
+        const subtotal = s.count * s.cost;
+        return `
+          <div class="service-item countable-row ${isActive ? 'active' : ''}">
+            <div class="service-left">
+              <div>
+                <span class="service-name">${lang === 'lv' ? s.lv : s.en}</span>
+                <span class="service-desc">${lang === 'lv' ? s.descLv : s.descEn}</span>
+              </div>
+            </div>
+            <div class="service-right">
+              <div class="service-cost">
+                ${isActive ? `€${subtotal.toLocaleString()} ${i18n[lang].yr}` : `€0 ${i18n[lang].yr}`}
+                <small>€${s.cost.toLocaleString()} ${i18n[lang].perChild}</small>
+              </div>
+              <div class="stepper">
+                <button onclick="changeServiceCount('${s.id}', -1)" aria-label="Samazināt">−</button>
+                <strong>${s.count}</strong>
+                <button onclick="changeServiceCount('${s.id}', 1)" aria-label="Palielināt">+</button>
+              </div>
+            </div>
           </div>
-        </div>
-        <span class="service-cost">~€${s.cost.toLocaleString()} ${i18n[lang].yr}</span>
-      </div>
-    `).join('');
+        `;
+      } else {
+        return `
+          <div class="service-item clickable ${s.checked ? 'active' : ''}" onclick="toggleService('${s.id}')">
+            <div class="service-left">
+              <input type="checkbox" ${s.checked ? 'checked' : ''} onclick="event.stopPropagation(); toggleService('${s.id}')" />
+              <div>
+                <span class="service-name">${lang === 'lv' ? s.lv : s.en}</span>
+                <span class="service-desc">${lang === 'lv' ? s.descLv : s.descEn}</span>
+              </div>
+            </div>
+            <div class="service-right">
+              <div class="service-cost">~€${s.cost.toLocaleString()} ${i18n[lang].yr}</div>
+            </div>
+          </div>
+        `;
+      }
+    }).join('');
   }
 
   function calculate() {
     const grossMonthly = Number(salaryRange.value);
     document.getElementById('salaryDisplay').textContent = `€${grossMonthly.toLocaleString()}`;
 
-    // Latvian 2026 Personal Income Tax (IIN) estimation with Kuldīga's exact 78% municipal share
     const vsaaoi = grossMonthly * 0.105;
-    const nonTaxable = 510; // Fixed 2026 non-taxable minimum
+    const nonTaxable = 510;
     const dependentRelief = dependents * 250;
     const taxableBase = Math.max(0, grossMonthly - vsaaoi - nonTaxable - dependentRelief);
     const monthlyIIN = taxableBase * 0.255;
-    const annualMunicipalIIN = Math.round(monthlyIIN * 12 * 0.78); // Official 78% share in 2026
+    const annualMunicipalIIN = Math.round(monthlyIIN * 12 * 0.78);
 
-    document.getElementById('totalMunicipalTax').textContent = `€${annualMunicipalIIN.toLocaleString()}`;
+    const taxFormatted = `€${annualMunicipalIIN.toLocaleString()}`;
+    document.getElementById('totalMunicipalTax').textContent = taxFormatted;
+    document.getElementById('mobTaxVal').textContent = `${taxFormatted} ${i18n[lang].yr}`;
 
     const linesContainer = document.getElementById('budgetLines');
     linesContainer.innerHTML = categories.map(cat => {
@@ -816,8 +1489,35 @@
       `;
     }).join('');
 
-    const totalServiceVal = services.filter(s => s.checked).reduce((acc, s) => acc + s.cost, 0);
-    document.getElementById('totalServiceValue').textContent = `€${totalServiceVal.toLocaleString()} ${i18n[lang].yr}`;
+    let totalServiceVal = 0;
+    const activeParts = [];
+
+    services.forEach(s => {
+      if (s.type === 'countable' && s.count > 0) {
+        const sub = s.count * s.cost;
+        totalServiceVal += sub;
+        const shortName = s.id === 'kg'
+          ? (lang === 'lv' ? 'bērnudārzs' : 'kindergarten')
+          : s.id === 'school'
+            ? (lang === 'lv' ? 'skola' : 'school')
+            : (lang === 'lv' ? 'interešu izglītība' : 'music/art/sports');
+        activeParts.push(`${i18n[lang].childrenUnit(s.count)} (${shortName}): €${sub.toLocaleString()}`);
+      } else if (s.type === 'toggle' && s.checked) {
+        totalServiceVal += s.cost;
+      }
+    });
+
+    const valFormatted = `€${totalServiceVal.toLocaleString()} ${i18n[lang].yr}`;
+    document.getElementById('totalServiceValue').textContent = valFormatted;
+    document.getElementById('mobServiceVal').textContent = valFormatted;
+
+    const breakdownEl = document.getElementById('serviceBreakdownText');
+    if (activeParts.length > 0) {
+      breakdownEl.style.display = 'block';
+      breakdownEl.textContent = (lang === 'lv' ? 'T.sk. bērniem: ' : 'Incl. children: ') + activeParts.join(' • ');
+    } else {
+      breakdownEl.style.display = 'none';
+    }
 
     const diff = Math.abs(totalServiceVal - annualMunicipalIIN);
     const compEl = document.getElementById('valueComparisonText');
@@ -831,8 +1531,8 @@
     const tax = document.getElementById('totalMunicipalTax').textContent;
     const val = document.getElementById('totalServiceValue').textContent;
     const text = lang === 'lv'
-      ? `Mans Kuldīgas novada 2026. gada budžeta čeks (bruto alga €${gross}): Mans gada IIN ieguldījums Kuldīgai (78%) ir ${tax}, savukārt izmantoto pašvaldības pakalpojumu vērtība ir ${val}.`
-      : `My Kuldīga Municipality 2026 Budget Receipt (gross salary €${gross}): My annual income tax share for Kuldīga (78%) is ${tax}, while the municipal services my household uses represent ${val}.`;
+      ? `Mans Kuldīgas novada 2026. gada budžeta čeks (bruto alga €${gross}, apgādājamie: ${dependents}): Mans gada IIN ieguldījums Kuldīgai (78%) ir ${tax}, savukārt izmantoto pašvaldības pakalpojumu vērtība ir ${val}.`
+      : `My Kuldīga Municipality 2026 Budget Receipt (gross salary €${gross}, dependents: ${dependents}): My annual income tax share for Kuldīga (78%) is ${tax}, while the municipal services my household uses represent ${val}.`;
 
     navigator.clipboard.writeText(text);
     const toast = document.getElementById('toast');
@@ -841,10 +1541,25 @@
     setTimeout(() => toast.classList.remove('show'), 2600);
   }
 
-  document.getElementById('receiptDate').textContent = new Date().toLocaleDateString('lv-LV');
+  async function initApp() {
+    document.getElementById('receiptDate').textContent = new Date().toLocaleDateString('lv-LV');
+    try {
+      const resp = await fetch('./data/csp_kuldiga.json', { cache: 'no-cache' });
+      if (resp.ok) {
+        const loaded = await resp.json();
+        stats = { ...stats, ...loaded };
+        salaryRange.value = stats.avgGrossSalary;
+      }
+    } catch (e) {}
+    renderOverview();
+    buildServicesFromStats();
+    updateDynamicTexts();
+    renderServices();
+    calculate();
+  }
+
   salaryRange.addEventListener('input', calculate);
-  renderServices();
-  calculate();
+  initApp();
 </script>
 </body>
 </html>
