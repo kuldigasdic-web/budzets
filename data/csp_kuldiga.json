@@ -1,0 +1,35 @@
+{
+  "source": "Kuldīgas novada budžets 2026 + CSP PxWeb API",
+  "updatedAt": "2026-11-12",
+  "population": 26666,
+  "populationYear": "2025/2026 (CSP)",
+  "populationChangeSince2021Pct": -3.8,
+  "demographics": {
+    "workingAge": 16912,
+    "workingAgePct": 63,
+    "aboveWorkingAge": 6259,
+    "aboveWorkingAgePct": 23,
+    "underWorkingAge": 4192,
+    "underWorkingAgePct": 15,
+    "unemploymentPct": 4.3,
+    "unemploymentLatviaPct": 5.0,
+    "activeBusinesses": 2956
+  },
+  "avgGrossSalary": 1385,
+  "salaryBySector": {
+    "period": "2025/2026 (CSP DSV040)",
+    "total": 1385,
+    "public": 1460,
+    "private": 1345
+  },
+  "minWage": 780,
+  "municipalIinShare": 0.78,
+  "totalBudgetEur": 56542779,
+  "serviceCosts": {
+    "kindergartenPerChild": 4200,
+    "schoolPerStudent": 1550,
+    "artsSportPerChild": 1100,
+    "urbanEnvTotalEur": 14518603,
+    "cultureSportTotalEur": 4344069
+  }
+}
