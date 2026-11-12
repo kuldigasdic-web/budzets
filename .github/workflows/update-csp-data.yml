@@ -1,0 +1,105 @@
+name: Atjaunināt Kuldīgas novada CSP datus
+
+on:
+  schedule:
+    # Palaižas katra mēneša 5. datumā plkst. 07:00 pēc Latvijas laika
+    - cron: '0 5 5 * *'
+  workflow_dispatch: # Ļauj palaist arī manuāli ar pogu GitHub "Actions" sadaļā
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-csp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Lejupielādēt repozitoriju
+        uses: actions/checkout@v4
+
+      - name: Iegūt jaunākos datus no CSP PxWeb API
+        run: |
+          python3 - << 'EOF'
+          import json
+          import urllib.request
+          from datetime import date
+
+          with open("data/csp_kuldiga.json", "r", encoding="utf-8") as f:
+              current = json.load(f)
+
+          def post_json(url, payload):
+              req = urllib.request.Request(
+                  url,
+                  data=json.dumps(payload).encode("utf-8"),
+                  headers={"Content-Type": "application/json", "User-Agent": "Kuldiga-OpenData-Bot/1.0"}
+              )
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  return json.loads(resp.read().decode("utf-8"))
+
+          def get_json(url):
+              req = urllib.request.Request(url, headers={"User-Agent": "Kuldiga-OpenData-Bot/1.0"})
+              with urllib.request.urlopen(req, timeout=20) as resp:
+                  return json.loads(resp.read().decode("utf-8"))
+
+          # 1. Iedzīvotāju skaits Kuldīgas novadā (CSP tabula IRD060)
+          try:
+              ird_url = "https://data.stat.gov.lv/api/v1/lv/OSP_PUB/START/POP/IR/IRD/IRD060"
+              meta = get_json(ird_url)
+              area_var = next(v for v in meta["variables"] if "Kuldīgas novads" in v["valueTexts"])
+              kuldiga_code = area_var["values"][area_var["valueTexts"].index("Kuldīgas novads")]
+              time_var = next(v for v in meta["variables"] if v["code"] == "TIME")
+              latest_year = time_var["values"][-1]
+
+              query = {
+                  "query": [
+                      {"code": area_var["code"], "selection": {"filter": "item", "values": [kuldiga_code]}},
+                      {"code": "TIME", "selection": {"filter": "item", "values": [latest_year]}}
+                  ],
+                  "response": {"format": "json"}
+              }
+              res = post_json(ird_url, query)
+              pop_val = int(float(res["data"][0]["values"][0]))
+              if pop_val > 10000:
+                  current["population"] = pop_val
+                  print(f"Atjaunināts iedzīvotāju skaits ({latest_year}): {pop_val}")
+          except Exception as e:
+              print("IRD060 neizdevās atjaunināt, saglabājam iepriekšējo:", e)
+
+          # 2. Vidējā bruto mēnešalga Kuldīgas novadā (CSP tabula DSV040)
+          try:
+              dsv_url = "https://data.stat.gov.lv/api/v1/lv/OSP_PUB/START/EMP/DS/DSV/DSV040"
+              meta = get_json(dsv_url)
+              area_var = next(v for v in meta["variables"] if "Kuldīgas novads" in v["valueTexts"])
+              kuldiga_code = area_var["values"][area_var["valueTexts"].index("Kuldīgas novads")]
+              time_var = next(v for v in meta["variables"] if v["code"] == "TIME")
+              latest_period = time_var["values"][-1]
+
+              # Izvēlamies bruto darba samaksu (pirmais rādītājs vai BRUTO)
+              ind_var = next((v for v in meta["variables"] if v["code"] not in [area_var["code"], "TIME"]), None)
+              query_items = [
+                  {"code": area_var["code"], "selection": {"filter": "item", "values": [kuldiga_code]}},
+                  {"code": "TIME", "selection": {"filter": "item", "values": [latest_period]}}
+              ]
+              if ind_var:
+                  query_items.append({"code": ind_var["code"], "selection": {"filter": "item", "values": [ind_var["values"][0]]}})
+
+              res = post_json(dsv_url, {"query": query_items, "response": {"format": "json"}})
+              sal_val = round(float(res["data"][0]["values"][0]))
+              if sal_val > 500:
+                  current["avgGrossSalary"] = sal_val
+                  current["avgSalaryPeriod"] = latest_period
+                  print(f"Atjaunināta vidējā bruto alga ({latest_period}): €{sal_val}")
+          except Exception as e:
+              print("DSV040 neizdevās atjaunināt, saglabājam iepriekšējo:", e)
+
+          current["updatedAt"] = date.today().isoformat()
+          with open("data/csp_kuldiga.json", "w", encoding="utf-8") as f:
+              json.dump(current, f, ensure_ascii=False, indent=2)
+          EOF
+
+      - name: Saglabāt izmaiņas repozitorijā
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/csp_kuldiga.json
+          git diff --staged --quiet || git commit -m "chore: automātiski atjaunināti CSP dati par Kuldīgas novadu"
+          git push
