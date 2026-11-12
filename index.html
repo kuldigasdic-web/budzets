@@ -65,66 +65,41 @@
       justify-content: space-between;
       align-items: center;
       gap: 1.25rem;
-      flex-wrap: wrap;
     }
 
-    /* Kuldīgas novada logotips ar drošības zonu */
     .brand-logo-wrap {
       display: inline-flex;
       align-items: center;
       padding: 0.35rem 0.5rem 0.35rem 0;
       text-decoration: none;
-      color: var(--muizas-balts);
     }
 
-    .brand-logo-svg {
-      height: 44px;
+    .brand-logo-img {
+      height: 46px;
       width: auto;
+      max-width: 240px;
+      object-fit: contain;
       display: block;
     }
 
-    .header-controls {
-      display: flex;
-      align-items: center;
-      gap: 0.65rem;
-      flex-wrap: wrap;
-    }
-
-    .sync-btn {
-      border: 1px solid rgba(238, 238, 230, 0.35);
-      background: rgba(238, 238, 230, 0.08);
-      color: var(--muizas-balts);
-      min-height: 38px;
-      padding: 0.4rem 0.85rem;
-      border-radius: 8px;
-      font-size: 0.82rem;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: background 0.15s;
-    }
-
-    .sync-btn:hover { background: rgba(238, 238, 230, 0.18); }
-
     .lang-toggle {
       display: inline-flex;
-      background: rgba(238, 238, 230, 0.12);
+      background: rgba(238, 238, 230, 0.14);
       border-radius: 8px;
       padding: 3px;
+      flex-shrink: 0;
     }
 
     .lang-toggle button {
       border: none;
       background: transparent;
       color: var(--muizas-balts);
-      min-width: 40px;
-      min-height: 32px;
-      padding: 0.3rem 0.65rem;
+      min-width: 42px;
+      min-height: 36px;
+      padding: 0.35rem 0.7rem;
       border-radius: 6px;
       font-weight: 500;
-      font-size: 0.82rem;
+      font-size: 0.84rem;
       cursor: pointer;
     }
 
@@ -133,7 +108,7 @@
       color: var(--nakts-melns);
     }
 
-    /* Ievada josla (Hero) — tīrs, mierīgs zīmola tonis */
+    /* Ievada josla */
     .intro-banner {
       max-width: 1180px;
       margin: 1.75rem auto 0;
@@ -152,7 +127,6 @@
       flex-wrap: wrap;
     }
 
-    /* Tipografikas vadlīnija (27. lpp.): virsrakstos bez All-Caps un Bold */
     .page-title {
       margin: 0 0 0.35rem;
       font-size: clamp(1.4rem, 3vw, 1.85rem);
@@ -223,7 +197,6 @@
       background: var(--meza-soft);
     }
 
-    /* Virsraksti atbilstoši vadlīnijām: normāls svars, nevis Bold/All-Caps */
     h2 {
       margin: 0 0 0.35rem;
       font-size: clamp(1.15rem, 2.3vw, 1.32rem);
@@ -590,7 +563,7 @@
 
     .service-cost small { display: block; font-weight: 400; font-size: 0.72rem; color: var(--muted); }
 
-    /* Novadnieka budžeta pārskata kartīte (aizstāj "čeku") */
+    /* Novadnieka budžeta pārskata kartīte */
     .summary-wrapper { position: sticky; top: 1.25rem; }
 
     .summary-card {
@@ -788,7 +761,7 @@
 
     @media (max-width: 560px) {
       header { padding: 0.9rem 1rem; }
-      .brand-logo-svg { height: 38px; }
+      .brand-logo-img { height: 38px; max-width: 195px; }
       .panel, .intro-card { padding: 1.15rem 1rem; }
       .comp-table { font-size: 0.79rem; }
       .comp-table th, .comp-table td { padding: 0.45rem 0.28rem; }
@@ -820,28 +793,17 @@
 
 <header>
   <div class="header-inner">
-    <!-- Oficiālais Kuldīgas novada horizontālais logotips ar lecošo vimbu (10.–14. lpp.) -->
-    <a href="#" class="brand-logo-wrap" aria-label="Kuldīgas novads">
-      <svg class="brand-logo-svg" viewBox="0 0 330 68" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
-        <!-- Kreisā vertikālā statne ar augšējo un apakšējo serifu -->
-        <path d="M4 6H28V13H20V55H28V62H4V55H12V13H4V6Z" fill="#EEEEE6"/>
-        <!-- Labā augšējā un apakšējā kāja + lidojošās vimbas loks -->
-        <path d="M54 6H82V13H72C70 23 64 30 56 34C64 38 70 45 72 55H82V62H54V55H63C61 47 56 41 49 38C42 42 33 43 22 34C33 25 42 26 49 30C56 27 61 21 63 13H54V6ZM32 34C38 38 44 37 48 34C44 31 38 30 32 34Z" fill="#EEEEE6"/>
-        <!-- Nosaukums atbilstoši 13.–14. lpp. horizontālajam salikumam -->
-        <text x="108" y="30" fill="#EEEEE6" font-family="Inter, sans-serif" font-size="21" font-weight="500" letter-spacing="2.2">KULDĪGAS</text>
-        <text x="108" y="56" fill="#EEEEE6" font-family="Inter, sans-serif" font-size="21" font-weight="500" letter-spacing="2.2">NOVADS</text>
-      </svg>
+    <a href="https://kuldigasnovads.lv" target="_blank" rel="noopener" class="brand-logo-wrap" aria-label="Kuldīgas novads">
+      <img
+        src="https://kuldigasnovads.lv/wp-content/uploads/2023/11/Kuldigas_novads_horizontals_gaiss.png"
+        alt="Kuldīgas novads"
+        class="brand-logo-img"
+      />
     </a>
 
-    <div class="header-controls">
-      <button class="sync-btn" id="syncBtn" onclick="syncLiveCspData()" title="Pārbaudīt jaunākos CSP datus">
-        <span id="syncIcon">↻</span>
-        <span data-i18n="syncBtnText">Atjaunināt CSP datus</span>
-      </button>
-      <div class="lang-toggle">
-        <button id="btn-lv" class="active" onclick="setLang('lv')">LV</button>
-        <button id="btn-en" onclick="setLang('en')">EN</button>
-      </div>
+    <div class="lang-toggle">
+      <button id="btn-lv" class="active" onclick="setLang('lv')">LV</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
     </div>
   </div>
 </header>
@@ -1101,7 +1063,6 @@
 
   const i18n = {
     lv: {
-      syncBtnText: "Atjaunināt CSP datus",
       pageTitle: "Tavs ieguldījums Kuldīgas novadā • Budžets 2026",
       pageSubtitle: "Atvērtās pārvaldības pārskats par Kuldīgas novada pašvaldības budžeta dinamiku, aktuālo CSP statistiku un Tavas mājsaimniecības pienesumu novada attīstībai.",
       tableTag: "Budžeta dinamika 2025 → 2026",
@@ -1134,9 +1095,6 @@
       shareBtn: "Kopēt kopsavilkumu",
       printBtn: "Drukāt / PDF",
       copied: "Budžeta pārskata kopsavilkums nokopēts!",
-      syncing: "Pārbauda CSP atvērtos datus...",
-      syncDone: "Dati sinhronizēti ar aktuālo CSP statistikas bāzi!",
-      syncFallback: "Izmantoti aktuālie kešotie CSP un 2026. gada budžeta dati.",
       mobTaxLabel: "IIN novadam:",
       mobValLabel: "Pakalpojumi:",
       mobJumpBtn: "Skatīt pārskatu ↓",
@@ -1147,7 +1105,6 @@
       compLower: (diff) => `Tavs nodokļu pienesums sedz visus izvēlētos pakalpojumus un vēl €${diff.toLocaleString()} novada kopējiem ceļiem, 1905. gada parkam un UNESCO vecpilsētai!`
     },
     en: {
-      syncBtnText: "Refresh CSB Data",
       pageTitle: "Your Contribution to Kuldīga • 2026 Budget",
       pageSubtitle: "Open governance overview of Kuldīga Municipality's budget dynamics, official CSB statistics, and your household's role in local development.",
       tableTag: "Budget Dynamics 2025 → 2026",
@@ -1180,9 +1137,6 @@
       shareBtn: "Copy Summary",
       printBtn: "Print / PDF",
       copied: "Budget overview summary copied!",
-      syncing: "Querying CSB Open Data API...",
-      syncDone: "Data synced with the latest CSB statistics!",
-      syncFallback: "Using verified cached CSB & 2026 budget figures.",
       mobTaxLabel: "Tax to Kuldīga:",
       mobValLabel: "Services value:",
       mobJumpBtn: "View overview ↓",
@@ -1256,52 +1210,6 @@
 
   function scrollToSummary() {
     document.getElementById('summarySection').scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-
-  // Tieša CSP datu atjaunošana no pārlūkprogrammas (nospiežot pogu galvenē)
-  async function syncLiveCspData() {
-    showToast(i18n[lang].syncing);
-    let updated = false;
-    try {
-      const irdUrl = "https://data.stat.gov.lv/api/v1/lv/OSP_PUB/START/POP/IR/IRD/IRD060";
-      const metaResp = await fetch(irdUrl);
-      if (metaResp.ok) {
-        const meta = await metaResp.json();
-        const areaVar = meta.variables.find(v => v.valueTexts.includes("Kuldīgas novads"));
-        const kuldigaCode = areaVar.values[areaVar.valueTexts.indexOf("Kuldīgas novads")];
-        const timeVar = meta.variables.find(v => v.code === "TIME");
-        const latestYear = timeVar.values[timeVar.values.length - 1];
-
-        const qResp = await fetch(irdUrl, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            query: [
-              { code: areaVar.code, selection: { filter: "item", values: [kuldigaCode] } },
-              { code: "TIME", selection: { filter: "item", values: [latestYear] } }
-            ],
-            response: { format: "json" }
-          })
-        });
-        if (qResp.ok) {
-          const res = await qResp.json();
-          const popVal = parseInt(parseFloat(res.data[0].values[0]), 10);
-          if (popVal > 10000) {
-            stats.population = popVal;
-            stats.populationYear = `${latestYear} (CSP)`;
-            stats.updatedAt = new Date().toISOString().slice(0, 10);
-            updated = true;
-          }
-        }
-      }
-    } catch (e) {}
-
-    renderOverview();
-    buildServicesFromStats();
-    updateDynamicTexts();
-    renderServices();
-    calculate();
-    showToast(updated ? i18n[lang].syncDone : i18n[lang].syncFallback);
   }
 
   function renderOverview() {
